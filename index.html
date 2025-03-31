@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Islamic Quiz - Prophet Yusuf</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Welcome Screen -->
+    <div id="welcome-screen">
+        <h1>Welcome Ya Mumineen and Ya Muminat
+            <br>Ready to test your knowlegde.
+        </h1>
+        <button onclick="showLevelSelection()">Start Quiz</bu 
+            
+            tton>
+    </div>
+
+    <!-- Level Selection Screen -->
+    <div id="level-screen" class="hidden">
+        <h2>BISMILLAHI RAHMAN RAHEEM.<br>Select Difficulty Level</h2>
+        <button onclick="startQuiz('easy')">Easy</button>
+        <button onclick="startQuiz('medium')">Medium</button>
+        <button onclick="startQuiz('hard')">Hard</button>
+    </div>
+
+    <!-- Quiz Screen -->
+    <div id="quiz-screen" class="hidden">
+        <h2 id="question-number"></h2>
+        <p id="question-text"></p>
+        <div id="options-container"></div>
+        <p id="timer">Time Left: <span id="time-left">240</span> sec</p>
+        <button onclick="prevQuestion()">Previous</button>
+        <button onclick="nextQuestion()">Next</button>
+    </div>
+
+    <!-- Results Screen -->
+    <div id="results-screen" class="hidden">
+        <h2>Quiz Completed!</h2>
+        <p>Your Score: <span id="final-score"></span></p>
+        <p>Correct Answers:</p>
+        <div id="correct-answers"></div>
+        <button onclick="restartQuiz()">Restart Quiz</button>
+        <button onclick="goToMainMenu()">Main Menu</button>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
