@@ -1,7 +1,7 @@
 /* Global Styles */
 body {
-    font-family: 'Arial', sans-serif;
-    background-color: #f1f1f1; /* Light neutral background */
+    font-family: 'Poppins', sans-serif;
+    background: linear-gradient(to bottom, #e8f5e9, #ffffff); /* Light green gradient */
     margin: 0;
     padding: 0;
     display: flex;
@@ -14,45 +14,58 @@ body {
 h1, h2 {
     color: #1a3d26; /* Deep green for titles */
     text-align: center;
+    font-weight: 600;
 }
 
 button {
     padding: 12px 24px;
-    background-color: #16a085; /* Islamic green for buttons */
+    background: linear-gradient(to right, #16a085, #1abc9c); /* Gradient for buttons */
     color: white;
     border: none;
     font-size: 16px;
-    border-radius: 5px;
+    border-radius: 25px;
     cursor: pointer;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 button:hover {
-    background-color: #1abc9c; /* Slightly lighter green on hover */
-    transform: scale(1.05); /* Slight zoom effect */
+    background: linear-gradient(to right, #1abc9c, #16a085); /* Reverse gradient on hover */
+    transform: translateY(-3px); /* Lift effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 button:focus {
     outline: 2px solid #1abc9c; /* Green outline for focus */
     outline-offset: 2px;
-    box-shadow: 0 0 5px rgba(26, 188, 156, 0.5); /* Subtle glow effect */
+    box-shadow: 0 0 8px rgba(26, 188, 156, 0.5); /* Subtle glow effect */
 }
 
 /* Input Fields */
 input[type="text"],
 input[type="password"] {
-    padding: 10px;
-    width: 80%;
+    padding: 12px;
+    width: 90%;
     margin: 10px 0;
     border: 1px solid #ccc;
-    border-radius: 5px;
+    border-radius: 25px;
     font-size: 16px;
-    background-color: #eaf0f1; /* Light grey-blue for input fields */
+    background-color: #f9f9f9; /* Light grey for input fields */
+    box-shadow: inset 0 2px 4px rgba(0, 0, 0, 0.1);
+    transition: all 0.3s ease;
+}
+
+input[type="text"]:focus,
+input[type="password"]:focus {
+    border-color: #16a085;
+    box-shadow: 0 0 8px rgba(26, 188, 156, 0.3);
+    outline: none;
 }
 
 label {
     font-size: 14px;
     color: #7f8c8d;
+    font-weight: 500;
 }
 
 /* Hidden Class */
@@ -64,18 +77,21 @@ label {
 #timer {
     font-size: 20px;
     color: #e74c3c; /* Red for timer, to show urgency */
+    font-weight: bold;
+    margin-bottom: 20px;
 }
 
 /* Screen Containers */
 #quiz-screen, #level-screen, #results-screen {
-    width: 80%;
+    width: 90%;
     max-width: 500px;
     text-align: center;
     background-color: #ffffff;
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    padding: 30px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
     border: 2px solid #16a085; /* Green border around containers */
+    animation: fadeIn 0.5s ease-in-out;
 }
 
 #question-number {
@@ -94,19 +110,21 @@ label {
 /* Options Styling */
 #options-container button {
     width: 100%;
-    padding: 10px;
-    margin: 5px 0;
-    background-color: #f39c12; /* Islamic gold for options */
+    padding: 12px;
+    margin: 8px 0;
+    background: linear-gradient(to right, #f39c12, #f1c40f); /* Gold gradient */
     color: white;
     border: none;
-    border-radius: 5px;
+    border-radius: 25px;
     font-size: 16px;
-    transition: background-color 0.3s, transform 0.2s;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
 }
 
 #options-container button:hover {
-    background-color: #f1c40f; /* Lighter gold on hover */
-    transform: scale(1.02); /* Slight zoom effect */
+    background: linear-gradient(to right, #f1c40f, #f39c12); /* Reverse gradient */
+    transform: translateY(-3px); /* Lift effect */
+    box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
 }
 
 .correct {
@@ -128,12 +146,11 @@ label {
     font-size: 36px;
     margin-bottom: 30px;
     color: #16a085; /* Islamic green */
+    font-weight: 700;
 }
 
 #welcome-screen button {
     margin: 10px;
-    background-color: #1abc9c; /* Green buttons */
-    color: white;
 }
 
 /* Level Screen */
@@ -141,22 +158,23 @@ label {
     text-align: center;
     padding: 40px 20px;
     background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 #level-screen h2 {
     font-size: 24px;
     margin-bottom: 20px;
     color: #1a3d26; /* Green color for level heading */
+    font-weight: 600;
 }
 
 /* Results Screen */
 #results-screen {
     padding: 30px 20px;
     background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.1);
 }
 
 #final-score {
@@ -174,9 +192,9 @@ label {
 /* Progress Bar */
 #progress-bar {
     width: 100%;
-    height: 10px;
+    height: 12px;
     background-color: #e0e0e0; /* Light grey background */
-    border-radius: 5px;
+    border-radius: 6px;
     overflow: hidden;
     margin-bottom: 20px;
 }
@@ -189,84 +207,23 @@ label {
     transition: width 0.3s ease-in-out;
 }
 
-/* Form Styling */
-form {
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    gap: 10px;
-}
-
-form label {
-    font-size: 14px;
-    color: #34495e;
-}
-
-form input {
-    padding: 10px;
-    width: 80%;
-    border: 1px solid #ccc;
-    border-radius: 5px;
-    font-size: 16px;
-}
-
-form button {
-    padding: 10px 20px;
-    background-color: #16a085;
-    color: white;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
-    transition: background-color 0.3s;
-}
-
-form button:hover {
-    background-color: #1abc9c;
-}
-
-/* Responsive Design */
-@media (max-width: 600px) {
-    #quiz-screen, #level-screen, #results-screen {
-        width: 90%;
-        padding: 15px;
-    }
-
-    button {
-        font-size: 14px;
-        padding: 10px 20px;
-    }
-
-    h1, h2 {
-        font-size: 20px;
-    }
-}
-
-/* Fade-In Animation for Transitions */
-.screen-transition {
-    animation: fadeIn 0.5s ease-in-out;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: scale(0.95); }
-    to { opacity: 1; transform: scale(1); }
-}
-
 /* Leaderboard Styling */
 #leaderboard {
     margin-top: 30px;
     text-align: left;
     background-color: #f9f9f9;
-    padding: 15px;
-    border-radius: 8px;
+    padding: 20px;
+    border-radius: 15px;
     border: 1px solid #ccc;
     max-height: 200px;
     overflow-y: auto;
-    transition: max-height 0.3s ease-in-out, background-color 0.3s;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
 }
 
 #leaderboard h3 {
     margin-top: 0;
     color: #2c3e50;
+    font-weight: 600;
 }
 
 #leaderboard ul {
@@ -286,9 +243,25 @@ form button:hover {
     font-size: 14px;
 }
 
-/* Style for selected answer */
-.selected {
-    border: 2px solid #2980b9;
-    background-color: #ecf0f1;
-    color: #2980b9;
+/* Fade-In Animation for Transitions */
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #quiz-screen, #level-screen, #results-screen {
+        width: 95%;
+        padding: 20px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    h1, h2 {
+        font-size: 22px;
+    }
 }
