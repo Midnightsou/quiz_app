@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Create Account - Islamic Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="create-account-screen">
+        <h2>Create Account</h2>
+        <form onsubmit="createAccount(event)">
+            <label for="create-username">Username:</label>
+            <input type="text" id="create-username" placeholder="Enter your username" aria-label="Username" required>
+            <label for="create-password">Password:</label>
+            <input type="password" id="create-password" placeholder="Enter your password" aria-label="Password" autocomplete="off" required>
+            <button type="submit">Create Account</button>
+        </form>
+        <p>Already have an account? <a href="signin.html">Sign In</a></p>
+    </div>
+</body>
+</html>

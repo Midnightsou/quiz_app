@@ -24,13 +24,21 @@ button {
     font-size: 16px;
     border-radius: 5px;
     cursor: pointer;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 button:hover {
     background-color: #1abc9c; /* Slightly lighter green on hover */
+    transform: scale(1.05); /* Slight zoom effect */
 }
 
+button:focus {
+    outline: 2px solid #1abc9c; /* Green outline for focus */
+    outline-offset: 2px;
+    box-shadow: 0 0 5px rgba(26, 188, 156, 0.5); /* Subtle glow effect */
+}
+
+/* Input Fields */
 input[type="text"],
 input[type="password"] {
     padding: 10px;
@@ -47,15 +55,18 @@ label {
     color: #7f8c8d;
 }
 
+/* Hidden Class */
 .hidden {
     display: none;
 }
 
+/* Timer Styling */
 #timer {
     font-size: 20px;
     color: #e74c3c; /* Red for timer, to show urgency */
 }
 
+/* Screen Containers */
 #quiz-screen, #level-screen, #results-screen {
     width: 80%;
     max-width: 500px;
@@ -80,6 +91,7 @@ label {
     color: #34495e; /* Dark grey-blue for question text */
 }
 
+/* Options Styling */
 #options-container button {
     width: 100%;
     padding: 10px;
@@ -89,14 +101,25 @@ label {
     border: none;
     border-radius: 5px;
     font-size: 16px;
-    transition: background-color 0.3s;
+    transition: background-color 0.3s, transform 0.2s;
 }
 
 #options-container button:hover {
     background-color: #f1c40f; /* Lighter gold on hover */
+    transform: scale(1.02); /* Slight zoom effect */
 }
 
-/* Styling for the Welcome Screen */
+.correct {
+    background-color: #2ecc71; /* Green for correct answers */
+    color: white;
+}
+
+.incorrect {
+    background-color: #e74c3c; /* Red for incorrect answers */
+    color: white;
+}
+
+/* Welcome Screen */
 #welcome-screen {
     text-align: center;
 }
@@ -113,37 +136,7 @@ label {
     color: white;
 }
 
-/* Sign Up / Sign In Forms */
-#signup-screen, #signin-screen {
-    max-width: 400px;
-    width: 100%;
-    padding: 20px;
-    text-align: center;
-    background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-    border: 2px solid #16a085; /* Green border around form */
-}
-
-#signup-screen input,
-#signin-screen input {
-    width: 100%;
-    margin-bottom: 10px;
-}
-
-#signup-screen label,
-#signin-screen label {
-    font-size: 14px;
-    color: #7f8c8d;
-}
-
-#signup-screen button,
-#signin-screen button {
-    width: 100%;
-    margin-top: 10px;
-}
-
-/* Styling for the Level Screen */
+/* Level Screen */
 #level-screen {
     text-align: center;
     padding: 40px 20px;
@@ -178,8 +171,124 @@ label {
     display: inline-block;
 }
 
-/* Timer Styling */
-#timer {
-    font-size: 18px;
-    color: #e74c3c;
+/* Progress Bar */
+#progress-bar {
+    width: 100%;
+    height: 10px;
+    background-color: #e0e0e0; /* Light grey background */
+    border-radius: 5px;
+    overflow: hidden;
+    margin-bottom: 20px;
+}
+
+#progress-bar span {
+    display: block;
+    height: 100%;
+    background-color: #16a085; /* Green progress */
+    width: 0%; /* Dynamically updated */
+    transition: width 0.3s ease-in-out;
+}
+
+/* Form Styling */
+form {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+}
+
+form label {
+    font-size: 14px;
+    color: #34495e;
+}
+
+form input {
+    padding: 10px;
+    width: 80%;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+form button {
+    padding: 10px 20px;
+    background-color: #16a085;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+form button:hover {
+    background-color: #1abc9c;
+}
+
+/* Responsive Design */
+@media (max-width: 600px) {
+    #quiz-screen, #level-screen, #results-screen {
+        width: 90%;
+        padding: 15px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px 20px;
+    }
+
+    h1, h2 {
+        font-size: 20px;
+    }
+}
+
+/* Fade-In Animation for Transitions */
+.screen-transition {
+    animation: fadeIn 0.5s ease-in-out;
+}
+
+@keyframes fadeIn {
+    from { opacity: 0; transform: scale(0.95); }
+    to { opacity: 1; transform: scale(1); }
+}
+
+/* Leaderboard Styling */
+#leaderboard {
+    margin-top: 30px;
+    text-align: left;
+    background-color: #f9f9f9;
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid #ccc;
+    max-height: 200px;
+    overflow-y: auto;
+    transition: max-height 0.3s ease-in-out, background-color 0.3s;
+}
+
+#leaderboard h3 {
+    margin-top: 0;
+    color: #2c3e50;
+}
+
+#leaderboard ul {
+    padding-left: 20px;
+}
+
+#leaderboard li:nth-child(odd) {
+    background-color: #f4f4f4; /* Light grey for odd rows */
+}
+
+#leaderboard li:nth-child(even) {
+    background-color: #ffffff; /* White for even rows */
+}
+
+#leaderboard li {
+    margin-bottom: 5px;
+    font-size: 14px;
+}
+
+/* Style for selected answer */
+.selected {
+    border: 2px solid #2980b9;
+    background-color: #ecf0f1;
+    color: #2980b9;
 }

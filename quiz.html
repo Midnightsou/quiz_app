@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Islamic Quiz</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <!-- Welcome Screen -->
+  <div id="welcome-screen" class="screen">
+    <h1>Welcome ya Mumeen and ya Muminat, <span id="user-name"></span>!</h1>
+    <button onclick="showLevelSelection()" aria-label="Start Quiz">Start Quiz</button>
+    <button onclick="logout()" aria-label="Logout">Logout</button>
+  </div>
+
+  <!-- Level Selection -->
+  <div id="level-screen" class="screen hidden">
+    <h2>Select Difficulty Level</h2>
+    <button onclick="startQuiz('easy')" aria-label="Easy Level">Easy</button>
+    <button onclick="startQuiz('medium')" aria-label="Medium Level">Medium</button>
+    <button onclick="startQuiz('hard')" aria-label="Hard Level">Hard</button>
+  </div>
+
+  <!-- Quiz Screen -->
+  <div id="quiz-screen" class="screen hidden">
+    <div id="timer" aria-live="polite"></div>
+    <div id="progress-bar"><span id="progress"></span></div>
+    <div id="question-number"></div>
+    <div id="question-text"></div>
+    <div id="options-container"></div>
+  </div>
+
+  <!-- Results Screen -->
+  <div id="results-screen" class="screen hidden">
+    <h2>Quiz Completed!</h2>
+    <p>Your Score: <span id="final-score"></span></p>
+    <p>Correct Answers:</p>
+    <div id="correct-answers"></div>
+    <button onclick="restartQuiz()" aria-label="Restart Quiz">Restart Quiz</button>
+    <button onclick="goToMainMenu()" aria-label="Main Menu">Main Menu</button>
+
+    <!-- Leaderboard Section -->
+    <div id="leaderboard">
+      <h3>Leaderboard</h3>
+      <ul id="leaderboard-list"></ul>
+    </div>
+  </div>
+
+  <script src="script.js" defer></script>
+  <script>
+    // Ensure the user is logged in
+    const currentUser = localStorage.getItem("currentUser");
+    if (!currentUser) {
+      window.location.href = "signin.html";
+    } else {
+      // Sanitize and display the username
+      document.getElementById("user-name").textContent = currentUser.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+  </script>
+</body>
+</html>

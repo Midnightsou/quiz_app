@@ -1,180 +1,215 @@
-const questions = {
+// User authentication functions
+function createAccount(event) {
+    event.preventDefault();
+    const username = document.getElementById("create-username").value;
+    const password = document.getElementById("create-password").value;
+    if (!username || !password) return alert("All fields are required.");
+    if (localStorage.getItem(username)) return alert("Username already exists.");
+    localStorage.setItem(username, password);
+    alert("Account created successfully!");
+    window.location.href = "signin.html";
+}
+
+function signIn(event) {
+    event.preventDefault();
+    const username = document.getElementById("signin-username").value;
+    const password = document.getElementById("signin-password").value;
+    const storedPassword = localStorage.getItem(username);
+    if (storedPassword === password) {
+        localStorage.setItem("currentUser", username);
+        window.location.href = "quiz.html";
+    } else {
+        alert("Invalid credentials.");
+    }
+}
+
+function logout() {
+    localStorage.removeItem("currentUser");
+    window.location.href = "index.html";
+}
+
+// Questions data
+const questionsData = {
     easy: [
-        ["Who is the last Prophet of Islam?", ["Prophet Musa", "Prophet Ibrahim", "Prophet Muhammad (SAW)"], 2],
-        ["What is the first pillar of Islam?", ["Zakat", "Salah", "Shahada"], 2],
-        ["How many daily prayers are obligatory for Muslims?", ["Three", "Four", "Five"], 2],
-        ["What is the holy book of Islam?", ["Torah", "Quran", "Injil"], 1],
-        ["Who was the first Caliph after Prophet Muhammad (SAW)?", ["Umar ibn Khattab", "Abu Bakr As-Siddiq", "Uthman ibn Affan"], 1],
-        ["What is the second most important Islamic city after Makkah?", ["Madinah", "Jerusalem", "Baghdad"], 0],
-        ["What is the meaning of 'Islam'?", ["Peace and Submission", "Freedom and Justice", "Love and Mercy"], 0],
-        ["How many verses are in Surah Al-Fatiha?", ["Five", "Six", "Seven"], 2],
-        ["What is the night on which the Quran was first revealed called?", ["Laylat al-Bara'ah", "Laylat al-Qadr", "Laylat al-Isra"], 1],
-        ["What is the first mosque built in Islam?", ["Masjid Al-Haram", "Quba Mosque", "Masjid An-Nabawi"], 1],
-        ["Who built the Kaaba?", ["Prophet Ibrahim and Prophet Ismail", "Prophet Musa", "Prophet Nuh"], 0],
-        ["What is the Islamic calendar based on?", ["Lunar cycle", "Solar cycle", "Both"], 0],
-        ["How many months are there in the Islamic calendar?", ["10", "12", "11"], 1],
-        ["Which is the holiest night in Islam?", ["Laylat al-Qadr", "Laylat al-Isra", "Eid Night"], 0],
-        ["Who was the wife of Prophet Muhammad (SAW) known as 'Mother of the Believers'?", ["Aisha (RA)", "Fatimah (RA)", "Khadijah (RA)"], 2],
-        ["What do Muslims say before eating?", ["Bismillah", "Allahu Akbar", "SubhanAllah"], 0],
-        ["Which Surah is called 'The Heart of the Quran'?", ["Surah Al-Fatiha", "Surah Al-Ikhlas", "Surah Yasin"], 2],
-        ["What is the Islamic ruling on consuming pork?", ["Forbidden", "Allowed", "Depends"], 0],
-        ["What is the name of the Islamic fasting month?", ["Rajab", "Ramadan", "Shawwal"], 1],
-        ["What is the reward for fasting in Ramadan?", ["Forgiveness of sins", "Wealth", "Strength"], 0]
+        { question: "Who was Prophet Yusuf's father?", options: ["Ibrahim", "Yaqub", "Musa", "Ismail"], answer: "Yaqub" },
+        { question: "Where was Prophet Yusuf thrown into?", options: ["A cave", "A well", "A house", "A pit"], answer: "A well" },
+        { question: "How many brothers did Prophet Yusuf have?", options: ["10", "11", "12", "13"], answer: "11" },
+        { question: "Who tried to seduce Prophet Yusuf?", options: ["The queen", "The king's wife", "The king", "The merchant's wife"], answer: "The king's wife" },
+        { question: "What did Yusuf's brothers do to him?", options: ["Stole his coat", "Told him to leave", "Sold him as a slave", "Threw him in a pit"], answer: "Threw him in a pit" },
+        { question: "Who bought Prophet Yusuf in Egypt?", options: ["The king", "Al-Aziz", "A merchant", "A prince"], answer: "Al-Aziz" },
+        { question: "What was Yusuf known for in Egypt?", options: ["His wisdom", "His strength", "His beauty", "His dream interpretations"], answer: "His dream interpretations" },
+        { question: "Who were the two people Yusuf interpreted dreams for in prison?", options: ["The king and his advisor", "Two prisoners", "The queen and her maid", "His brothers"], answer: "Two prisoners" },
+        { question: "What was the king's dream that Yusuf interpreted?", options: ["Seven cows", "Seven stars", "Seven trees", "Seven years of famine"], answer: "Seven cows" },
+        { question: "What did Prophet Yusuf predict for Egypt?", options: ["Prosperity", "Seven years of famine", "Seven years of peace", "War"], answer: "Seven years of famine" },
+        { question: "What did Yusuf do when he saw his brothers in Egypt?", options: ["He forgave them", "He punished them", "He rejected them", "He ignored them"], answer: "He forgave them" },
+        { question: "Who was the first to recognize Yusuf when he revealed himself?", options: ["His father", "His brothers", "The king", "His uncle"], answer: "His brothers" },
+        { question: "What did Yaqub do when he was told Yusuf was alive?", options: ["Cried and rejoiced", "Refused to believe", "Told them to go back", "Praised Allah"], answer: "Refused to believe" },
+        { question: "What did Yusuf do when he revealed himself to his brothers?", options: ["Punished them", "Forgave them", "Told them to leave", "Cried and left"], answer: "Forgave them" },
+        { question: "What did Yusuf's father Yaqub receive from his sons that proved Yusuf was alive?", options: ["His shirt", "A letter", "His coat", "A ring"], answer: "His shirt" },
+        { question: "How did Prophet Yusuf become powerful in Egypt?", options: ["Through military conquest", "Through his dream interpretations", "By building great structures", "By being loved by the king"], answer: "Through his dream interpretations" },
+        { question: "What did Prophet Yusuf do for his family when they came to Egypt?", options: ["Welcomed them with a feast", "Gave them food", "Sent them to work", "Offered them shelter"], answer: "Gave them food" },
+        { question: "How did Prophet Yusuf treat his brothers when they came to Egypt during the famine?", options: ["He punished them", "He forgave them", "He ignored them", "He sent them away"], answer: "He forgave them" },
+        { question: "What did the king of Egypt do after Yusuf interpreted his dream?", options: ["Fired him", "Made him a governor", "Rewarded him", "Ignored him"], answer: "Made him a governor" },
+        { question: "What did Yusuf do after he was reunited with his family?", options: ["He left Egypt", "He built a palace for them", "He invited them to stay with him", "He made them rich"], answer: "He invited them to stay with him" },
+        { question: "What was the result of Prophet Yusuf's patience and trust in Allah?", options: ["He became king", "He was rewarded with wealth", "He was reunited with his family", "He became a prophet"], answer: "He was reunited with his family" }
     ],
     medium: [
-        ["In which Islamic month did the Battle of Badr take place?", ["Muharram", "Ramadan", "Rabi' al-Awwal"], 1],
-        ["Who was the Prophet known for his patience during suffering?", ["Prophet Yusuf", "Prophet Ayyub", "Prophet Musa"], 1],
-        ["How many Makki Surahs are there in the Quran?", ["70", "60", "50"], 0],
-        ["Which companion of the Prophet (SAW) is known as 'The Sword of Allah'?", ["Khalid ibn Al-Walid", "Abu Bakr As-Siddiq", "Ali ibn Abi Talib"], 0],
-        ["What was the name of the treaty signed between Muslims and Quraysh in the 6th year of Hijrah?", ["Treaty of Makkah", "Treaty of Hudaybiyyah", "Treaty of Taif"], 1],
-        ["How long did Prophet Muhammad (SAW) receive revelation?", ["20 years", "23 years", "25 years"], 1],
-        ["Who was the first person to accept Islam?", ["Abu Bakr", "Ali ibn Abi Talib", "Khadijah bint Khuwaylid"], 2],
-        ["What was the name of Prophet Muhammad’s (SAW) mother?", ["Fatimah", "Aminah", "Asiya"], 1],
-        ["Which angel brought revelation to Prophet Muhammad (SAW)?", ["Angel Israfil", "Angel Jibreel", "Angel Mikail"], 1],
-        ["What was the migration of Prophet Muhammad (SAW) from Makkah to Madinah called?", ["Hajj", "Hijrah", "Umrah"], 1],
-        ["How many years did Prophet Muhammad (SAW) live in Makkah before Hijrah?", ["10", "13", "15"], 1],
-        ["Who was known as 'The Trustworthy' before Prophethood?", ["Prophet Musa", "Prophet Muhammad (SAW)", "Prophet Isa"], 1],
-        ["Which battle was the first major battle in Islamic history?", ["Battle of Uhud", "Battle of Badr", "Battle of Khandaq"], 1],
-        ["What was the real name of Abu Bakr As-Siddiq?", ["Abdullah ibn Uthman", "Umar ibn Khattab", "Ali ibn Abi Talib"], 0],
-        ["Which Surah was revealed completely first?", ["Surah Al-Fatiha", "Surah Al-Alaq", "Surah Al-Kahf"], 0],
-        ["Who compiled the Quran into one book?", ["Umar ibn Khattab", "Uthman ibn Affan", "Ali ibn Abi Talib"], 1],
-        ["Which Prophet was given the miracle of speaking in infancy?", ["Prophet Isa", "Prophet Musa", "Prophet Yusuf"], 0],
-        ["Which Surah in the Quran is named after a woman?", ["Surah Maryam", "Surah Nisa", "Surah Hujurat"], 0],
-        ["Which city was known as Yathrib before Islam?", ["Makkah", "Madinah", "Taif"], 1],
-        ["Which Prophet could control the wind?", ["Prophet Isa", "Prophet Sulayman", "Prophet Yunus"], 1]
+        { question: "What was the name of Prophet Yusuf's father?", options: ["Ibrahim", "Yaqub", "Ismail", "Musa"], answer: "Yaqub" },
+        { question: "Which prophet is Prophet Yusuf's great-grandfather?", options: ["Ishaq", "Ibrahim", "Nuh", "Idris"], answer: "Ibrahim" },
+        { question: "How many brothers did Prophet Yusuf have?", options: ["10", "11", "12", "13"], answer: "11" },
+        { question: "What did Prophet Yusuf see in his dream?", options: ["Fire", "A tree", "11 stars, sun and moon", "A ladder"], answer: "11 stars, sun and moon" },
+        { question: "Why did Yusuf's brothers hate him?", options: ["He was older", "He got more food", "Their father loved him more", "He stole their things"], answer: "Their father loved him more" },
+        { question: "What did the brothers do to Prophet Yusuf?", options: ["Took him to Syria", "Sold him to a traveler", "Threw him in a well", "Hurt him"], answer: "Threw him in a well" },
+        { question: "What did the brothers tell their father about Yusuf?", options: ["He went to town", "He drowned", "A wolf ate him", "He ran away"], answer: "A wolf ate him" },
+        { question: "Who picked up Yusuf from the well?", options: ["A merchant caravan", "His brothers", "A prophet", "An angel"], answer: "A merchant caravan" },
+        { question: "Where was Yusuf sold?", options: ["Jerusalem", "Mecca", "Egypt", "Medina"], answer: "Egypt" },
+        { question: "Who tried to seduce Prophet Yusuf?", options: ["Queen of Egypt", "His master's wife", "His cousin", "His sister"], answer: "His master's wife" },
+        { question: "What was Yusuf known for in prison?", options: ["Carpentry", "Healing", "Dream interpretation", "Leadership"], answer: "Dream interpretation" },
+        { question: "Who had a dream about birds eating from his head?", options: ["The king", "Yusuf", "A prisoner", "A brother"], answer: "A prisoner" },
+        { question: "What was the king's dream that Yusuf interpreted?", options: ["Seven fat cows eaten by seven lean cows", "A wolf", "A boat", "An army"], answer: "Seven fat cows eaten by seven lean cows" },
+        { question: "What position did Yusuf get in Egypt?", options: ["Warrior", "Minister of finance", "Farmer", "Chief judge"], answer: "Minister of finance" },
+        { question: "Why did Yusuf's brothers come to Egypt?", options: ["To conquer", "For trade", "For food during famine", "To search for Yusuf"], answer: "For food during famine" },
+        { question: "Did Yusuf recognize his brothers when they came to Egypt?", options: ["Yes", "No"], answer: "Yes" },
+        { question: "What did Yusuf hide in his brother’s bag?", options: ["Money", "A gem", "The king’s cup", "Bread"], answer: "The king’s cup" },
+        { question: "What did Yusuf do when he finally revealed himself?", options: ["Punished them", "Forgave them", "Told them to leave", "Cried and left"], answer: "Forgave them" },
+        { question: "Who came with Yusuf's brothers to Egypt later?", options: ["Their wives", "Their children", "Their father Yaqub", "Their enemies"], answer: "Their father Yaqub" },
+        { question: "What did Yaqub regain when he saw Yusuf’s shirt?", options: ["Strength", "Wealth", "His sight", "His land"], answer: "His sight" }
     ],
     hard: [
-        ["Which Sahabi was given the title 'The Sword of Allah'?", ["Abu Bakr As-Siddiq", "Khalid ibn Al-Walid", "Umar ibn Khattab"], 1],
-        ["Which battle is also known as the 'Day of Furqan'?", ["Battle of Uhud", "Battle of Badr", "Battle of Khandaq"], 1],
-        ["What is the name of the mountain where the first revelation was received?", ["Jabal al-Rahma", "Jabal al-Noor", "Jabal al-Uhud"], 1],
-        ["How many years did Prophet Nuh (AS) preach to his people?", ["500 years", "950 years", "1000 years"], 1],
-        ["Who was the first child to accept Islam?", ["Ali ibn Abi Talib", "Abdullah ibn Umar", "Hasan ibn Ali"], 0],
-        ["What was the age of Prophet Muhammad (SAW) when his mother passed away?", ["Six years old", "Eight years old", "Twelve years old"], 0],
-        ["Which Prophet was known as the 'Father of Prophets'?", ["Prophet Ibrahim", "Prophet Adam", "Prophet Musa"], 0],
-        ["How many prophets are mentioned by name in the Quran?", ["20", "25", "30"], 1],
-        ["Who led the Muslims in prayer when Prophet Muhammad (SAW) was on his deathbed?", ["Ali ibn Abi Talib", "Abu Bakr As-Siddiq", "Umar ibn Khattab"], 1],
-        ["Who was the Prophet that could talk to ants?", ["Prophet Musa", "Prophet Sulayman", "Prophet Dawud"], 1],
-        ["Which Prophet was tested with extreme illness but remained patient?", ["Prophet Yusuf", "Prophet Ayyub", "Prophet Shu'ayb"], 1],
-        ["How many gates of Jannah are mentioned in the Quran?", ["Six", "Seven", "Eight"], 2],
-        ["Which Surah contains the longest Ayah in the Quran?", ["Surah Al-Baqarah", "Surah Al-Kahf", "Surah Al-Ma'idah"], 0],
-        ["Who was known as the most generous companion of Prophet Muhammad (SAW)?", ["Abdul Rahman ibn Awf", "Uthman ibn Affan", "Bilal ibn Rabah"], 1],
-        ["Which angel is responsible for taking souls?", ["Jibreel", "Israfil", "Malik al-Mawt"], 2],
-        ["What was the name of Prophet Yusuf's (AS) younger brother?", ["Benjamin", "Yahya", "Isa"], 0],
-        ["How many idols were inside the Kaaba before the conquest of Makkah?", ["100", "360", "500"], 1],
-        ["Who was the last Sahabi to die?", ["Anas ibn Malik", "Abu Hurairah", "Abdullah ibn Abbas"], 0],
-        ["Which two Prophets were cousins?", ["Musa and Harun", "Isa and Yahya", "Ibrahim and Lut"], 1],
-        ["Which wife of Prophet Muhammad (SAW) was given the title 'Mother of the Poor'?", ["Aisha (RA)", "Zainab bint Jahsh (RA)", "Khadijah (RA)"], 1]
+        { question: "What was the reason behind Prophet Yusuf’s brothers’ jealousy?", options: ["His good deeds", "His dream", "His beauty", "His knowledge"], answer: "His dream" },
+        { question: "What did the wife of Al-Aziz try to do to Prophet Yusuf?", options: ["Poison him", "Seduce him", "Imprison him", "Accuse him of theft"], answer: "Seduce him" },
+        { question: "Who was the first to recognize Prophet Yusuf when he revealed himself?", options: ["His father", "His brothers", "The king", "His mother"], answer: "His brothers" },
+        { question: "How did Prophet Yusuf respond to his brothers after revealing himself?", options: ["He punished them", "He forgave them", "He asked for a favor", "He demanded an apology"], answer: "He forgave them" },
+        { question: "What did Yusuf’s father, Yaqub, do when he heard that Yusuf was alive?", options: ["Wept and refused to believe it", "Immediately traveled to Egypt", "Sent gifts to Yusuf", "Gave thanks and praised Allah"], answer: "Wept and refused to believe it" },
+        { question: "Which dream of the king did Yusuf interpret?", options: ["Seven cows", "Seven stars", "Seven cities", "Seven horses"], answer: "Seven cows" },
+        { question: "How many years of famine did Prophet Yusuf predict?", options: ["7", "10", "5", "12"], answer: "7" },
+        { question: "When Yusuf’s brothers arrived in Egypt, what was the first thing he did?", options: ["Tested them by taking one prisoner", "Fed them", "Called for a feast", "Told them about his dream"], answer: "Tested them by taking one prisoner" },
+        { question: "What did Yusuf instruct his servants to do when his brothers left Egypt?", options: ["Return their money secretly", "Give them food and gifts", "Send them away without any food", "Accuse them of theft"], answer: "Return their money secretly" },
+        { question: "What did Yaqub say when he was told that Yusuf was alive?", options: ["Praise be to Allah", "I will not believe it until I see him", "I knew this day would come", "I am happy but sorrowful"], answer: "I will not believe it until I see him" },
+        { question: "What significant event occurred when Prophet Yusuf reunited with his father?", options: ["He became a king", "His sight was restored", "He was crowned", "His dream came true"], answer: "His sight was restored" },
+        { question: "Why did Prophet Yusuf’s brothers fear him when they returned to Egypt?", options: ["Because they thought he would harm them", "Because he was powerful", "Because he recognized them", "Because he had become a king"], answer: "Because they thought he would harm them" },
+        { question: "What did Yusuf do when he was falsely accused?", options: ["He defended himself", "He admitted his crime", "He prayed for patience", "He left the country"], answer: "He prayed for patience" },
+        { question: "What was Prophet Yusuf’s reaction to being falsely accused?", options: ["He defended himself", "He admitted his crime", "He prayed for patience", "He left the country"], answer: "He prayed for patience" },
+        { question: "What did Yusuf do when he reunited with his family?", options: ["He became a king", "He built a palace", "He welcomed them to Egypt", "He made them his ministers"], answer: "He welcomed them to Egypt" },
+        { question: "Did Yusuf recognize his brothers when they came to Egypt?", options: ["Yes", "No"], answer: "Yes" },
+        { question: "What did Yusuf hide in his brother’s bag?", options: ["Money", "A gem", "The king’s cup", "Bread"], answer: "The king’s cup" },
+        { question: "What did Yusuf do when he finally revealed himself?", options: ["He punished them", "He cried and forgave them", "He told them to leave", "He imprisoned them"], answer: "He cried and forgave them" },
+        { question: "Who came with Yusuf's brothers to Egypt later?", options: ["Their wives", "Their children", "Their father Yaqub", "Their enemies"], answer: "Their father Yaqub" },
+        { question: "What did Yaqub regain when he saw Yusuf’s shirt?", options: ["Strength", "Wealth", "His sight", "His land"], answer: "His sight" }
     ]
 };
 
-let currentLevel = "";
-let currentQuestions = [];
-let currentQuestionIndex = 0;
+// Quiz variables
+let questions = [];
+let currentQuestion = 0;
 let score = 0;
 let timer;
-let timeLeft = 240;
 
-// Display Level Selection
+// Show level selection screen
 function showLevelSelection() {
     document.getElementById("welcome-screen").classList.add("hidden");
     document.getElementById("level-screen").classList.remove("hidden");
 }
 
-// Start Quiz
+// Start quiz based on selected level
 function startQuiz(level) {
-    currentLevel = level;
-    currentQuestions = [...questions[level]].sort(() => Math.random() - 0.5); // Shuffle questions
-    currentQuestionIndex = 0;
+    questions = [...questionsData[level]];
+    questions = questions.sort(() => Math.random() - 0.5); // Shuffle questions
     score = 0;
-    showQuestion();
+    currentQuestion = 0;
     document.getElementById("level-screen").classList.add("hidden");
     document.getElementById("quiz-screen").classList.remove("hidden");
+    showQuestion();
     startTimer();
 }
 
-// Show Question
+// Display the current question
 function showQuestion() {
-    const questionData = currentQuestions[currentQuestionIndex];
-    document.getElementById("question-number").textContent = `Question ${currentQuestionIndex + 1} of 20`;
-    document.getElementById("question-text").textContent = questionData[0];
-
+    const q = questions[currentQuestion];
+    document.getElementById("question-number").textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
+    document.getElementById("question-text").textContent = q.question;
     const optionsContainer = document.getElementById("options-container");
     optionsContainer.innerHTML = "";
-
-    questionData[1].forEach((option, index) => {
+    q.options.forEach(option => {
         const btn = document.createElement("button");
         btn.textContent = option;
-        btn.onclick = () => checkAnswer(index);
+        btn.onclick = () => selectOption(option);
         optionsContainer.appendChild(btn);
     });
-
-    document.getElementById("quiz-screen").classList.add("fade");
+    updateProgressBar();
 }
 
-// Check Answer
-function checkAnswer(selectedIndex) {
-    if (selectedIndex === currentQuestions[currentQuestionIndex][2]) {
-        score++;
-    }
-    nextQuestion();
+// Handle option selection
+function selectOption(selected) {
+    const correct = questions[currentQuestion].answer;
+    if (selected === correct) score++;
+    currentQuestion++;
+    if (currentQuestion < questions.length) showQuestion();
+    else endQuiz();
 }
 
-// Next Question
-function nextQuestion() {
-    if (currentQuestionIndex < 19) {
-        currentQuestionIndex++;
-        showQuestion();
-    } else {
-        endQuiz();
-    }
+// Update the progress bar
+function updateProgressBar() {
+    const progress = ((currentQuestion) / questions.length) * 100;
+    document.getElementById("progress").style.width = `${progress}%`;
 }
 
-// End Quiz
+// End the quiz and show results
 function endQuiz() {
     clearInterval(timer);
     document.getElementById("quiz-screen").classList.add("hidden");
     document.getElementById("results-screen").classList.remove("hidden");
-    document.getElementById("final-score").textContent = `${score} / 20`;
+    document.getElementById("final-score").textContent = `${score} / ${questions.length}`;
 
-    const answersContainer = document.getElementById("correct-answers");
-    answersContainer.innerHTML = "";
-    currentQuestions.forEach((q, index) => {
-        const p = document.createElement("p");
-        p.textContent = `Q${index + 1}: ${q[0]} - Correct Answer: ${q[1][q[2]]}`;
-        answersContainer.appendChild(p);
+    const correctAnswersContainer = document.getElementById("correct-answers");
+    correctAnswersContainer.innerHTML = "";
+    questions.forEach((q, i) => {
+        const div = document.createElement("div");
+        div.textContent = `${i + 1}. ${q.question} - Answer: ${q.answer}`;
+        correctAnswersContainer.appendChild(div);
     });
+    updateLeaderboard();
 }
 
-// Previous Question
-function prevQuestion() {
-    if (currentQuestionIndex > 0) {
-        currentQuestionIndex--;
-        showQuestion();
-    }
+// Restart the quiz
+function restartQuiz() {
+    window.location.href = "quiz.html";
 }
 
-// Timer
+// Go back to the main menu
+function goToMainMenu() {
+    window.location.href = "index.html";
+}
+
+// Start the quiz timer
 function startTimer() {
-    timeLeft = 240;
-    document.getElementById("time-left").textContent = timeLeft;
+    let time = 20 * questions.length;
+    const timerEl = document.getElementById("timer");
+    timerEl.textContent = `Time Left: ${time}s`;
     timer = setInterval(() => {
-        timeLeft--;
-        document.getElementById("time-left").textContent = timeLeft;
-        if (timeLeft === 0) {
+        time--;
+        if (time <= 0) {
             clearInterval(timer);
             endQuiz();
+        } else {
+            timerEl.textContent = `Time Left: ${time}s`;
         }
     }, 1000);
 }
 
-// Restart Quiz
-function restartQuiz() {
-    document.getElementById("results-screen").classList.add("hidden");
-    document.getElementById("level-screen").classList.remove("hidden");
-}
+// Update the leaderboard
+function updateLeaderboard() {
+    const leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
+    const user = localStorage.getItem("currentUser") || "Anonymous";
+    leaderboard.push({ user, score });
+    leaderboard.sort((a, b) => b.score - a.score);
+    localStorage.setItem("leaderboard", JSON.stringify(leaderboard.slice(0, 10)));
 
-// Main Menu
-function goToMainMenu() {
-    document.getElementById("results-screen").classList.add("hidden");
-    document.getElementById("welcome-screen").classList.remove("hidden");
+    const list = document.getElementById("leaderboard-list");
+    list.innerHTML = "";
+    leaderboard.forEach(entry => {
+        const li = document.createElement("li");
+        li.textContent = `${entry.user}: ${entry.score}`;
+        list.appendChild(li);
+    });
 }

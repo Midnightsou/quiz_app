@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In - Islamic Quiz</title>
+    <link rel="stylesheet" href="styles.css">
+    <script src="script.js" defer></script>
+</head>
+<body>
+    <div id="signin-screen">
+        <h2>Sign In</h2>
+        <form onsubmit="signIn(event)">
+            <label for="signin-username">Username:</label>
+            <input type="text" id="signin-username" placeholder="Enter your username" aria-label="Username" required>
+            <label for="signin-password">Password:</label>
+            <input type="password" id="signin-password" placeholder="Enter your password" aria-label="Password" autocomplete="off" required>
+            <button type="submit">Sign In</button>
+        </form>
+        <p>Don't have an account? <a href="create_account.html">Create Account</a></p>
+    </div>
+</body>
+</html>
