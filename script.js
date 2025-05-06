@@ -1,31 +1,100 @@
+// Utility functions for localStorage management
+const LOCAL_STORAGE_KEY = "quizAppUsers";
+
+// Save user data to localStorage
+function saveUser(username, password) {
+    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
+    if (users[username]) {
+        alert("Username already exists. Please choose a different username.");
+        return false;
+    }
+    users[username] = {
+        password, // In a real app, hash the password before storing it
+        createdAt: new Date().toISOString(),
+    };
+    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
+    return true;
+}
+
+// Get user data from localStorage
+function getUser(username) {
+    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
+    return users[username] || null;
+}
+
+// Delete user data from localStorage
+function deleteUser(username) {
+    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
+    if (users[username]) {
+        delete users[username];
+        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
+    }
+}
+
+// Authenticate user
+function authenticateUser(username, password) {
+    const user = getUser(username);
+    if (!user) {
+        alert("User not found. Please create an account.");
+        return false;
+    }
+    if (user.password !== password) {
+        alert("Incorrect password. Please try again.");
+        return false;
+    }
+    localStorage.setItem("currentUser", username); // Save the logged-in user
+    return true;
+}
+
+// Logout user
+function logoutUser() {
+    localStorage.removeItem("currentUser");
+    alert("You have been logged out.");
+    window.location.href = "index.html";
+}
+
+// Get the currently logged-in user
+function getCurrentUser() {
+    return localStorage.getItem("currentUser");
+}
+
 // User authentication functions
 function createAccount(event) {
     event.preventDefault();
-    const username = document.getElementById("create-username").value;
-    const password = document.getElementById("create-password").value;
-    if (!username || !password) return alert("All fields are required.");
-    if (localStorage.getItem(username)) return alert("Username already exists.");
-    localStorage.setItem(username, password);
-    alert("Account created successfully!");
-    window.location.href = "signin.html";
+    const username = document.getElementById("create-username").value.trim();
+    const password = document.getElementById("create-password").value.trim();
+
+    if (!username || !password) {
+        alert("All fields are required.");
+        return;
+    }
+
+    const success = saveUser(username, password);
+    if (success) {
+        alert("Account created successfully!");
+        window.location.href = "signin.html";
+    }
 }
 
 function signIn(event) {
     event.preventDefault();
-    const username = document.getElementById("signin-username").value;
-    const password = document.getElementById("signin-password").value;
-    const storedPassword = localStorage.getItem(username);
-    if (storedPassword === password) {
-        localStorage.setItem("currentUser", username);
+    const username = document.getElementById("signin-username").value.trim();
+    const password = document.getElementById("signin-password").value.trim();
+
+    if (!username || !password) {
+        alert("All fields are required.");
+        return;
+    }
+
+    const success = authenticateUser(username, password);
+    if (success) {
+        alert("Sign in successful!");
         window.location.href = "quiz.html";
-    } else {
-        alert("Invalid credentials.");
     }
 }
 
 function logout() {
-    localStorage.removeItem("currentUser");
-    window.location.href = "index.html";
+    logoutUser();
 }
 
 // Questions data
@@ -200,7 +269,7 @@ function startTimer() {
 // Update the leaderboard
 function updateLeaderboard() {
     const leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    const user = localStorage.getItem("currentUser") || "Anonymous";
+    const user = getCurrentUser() || "Anonymous";
     leaderboard.push({ user, score });
     leaderboard.sort((a, b) => b.score - a.score);
     localStorage.setItem("leaderboard", JSON.stringify(leaderboard.slice(0, 10)));
@@ -213,3 +282,70 @@ function updateLeaderboard() {
         list.appendChild(li);
     });
 }
+
+// Toggle Dark Mode
+function toggleDarkMode() {
+    const body = document.body;
+    const themeIcon = document.getElementById("theme-icon");
+
+    // Toggle the dark-mode class
+    body.classList.toggle("dark-mode");
+
+    // Change the icon based on the current mode
+    if (body.classList.contains("dark-mode")) {
+        themeIcon.textContent = "☀️"; // Sun icon for light mode
+    } else {
+        themeIcon.textContent = "🌙"; // Moon icon for dark mode
+    }
+
+    // Save the user's preference in localStorage
+    const isDarkMode = body.classList.contains("dark-mode");
+    localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
+}
+
+// Apply the saved theme on page load
+window.onload = () => {
+    const savedTheme = localStorage.getItem("darkMode");
+    const themeIcon = document.getElementById("theme-icon");
+
+    if (savedTheme === "enabled") {
+        document.body.classList.add("dark-mode");
+        themeIcon.textContent = "☀️"; // Sun icon for light mode
+    } else {
+        themeIcon.textContent = "🌙"; // Moon icon for dark mode
+    }
+};
+
+// Toggle Password Visibility
+function togglePassword(inputId) {
+    const input = document.getElementById(inputId);
+    if (input.type === "password") {
+        input.type = "text";
+    } else {
+        input.type = "password";
+    }
+}
+
+// Simple Validation Feedback
+function validateField(inputId, errorId, message) {
+    const input = document.getElementById(inputId);
+    const error = document.getElementById(errorId);
+    if (!input.value.trim()) {
+        error.textContent = message;
+        error.style.display = "block";
+    } else {
+        error.style.display = "none";
+    }
+}
+
+// Example Usage for Validation
+document.getElementById("signin-username").addEventListener("blur", () => {
+    validateField("signin-username", "username-error", "Username is required.");
+});
+
+document.getElementById("signin-password").addEventListener("blur", () => {
+    validateField("signin-password", "password-error", "Password is required.");
+});
+
+localStorage.setItem("key", "value");
+const value = localStorage.getItem("key");
