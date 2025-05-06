@@ -223,21 +223,46 @@ function updateProgressBar() {
     document.getElementById("progress").style.width = `${progress}%`;
 }
 
+// Save score after the quiz ends
+function saveScore(username, score) {
+    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+
+    leaderboard.push({ username, score });
+
+    // Sort by highest score and keep top 10
+    leaderboard.sort((a, b) => b.score - a.score);
+    leaderboard.splice(10);
+
+    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+}
+
 // End the quiz and show results
 function endQuiz() {
-    clearInterval(timer);
+    clearInterval(timer); // Stop the timer
     document.getElementById("quiz-screen").classList.add("hidden");
     document.getElementById("results-screen").classList.remove("hidden");
-    document.getElementById("final-score").textContent = `${score} / ${questions.length}`;
 
-    const correctAnswersContainer = document.getElementById("correct-answers");
-    correctAnswersContainer.innerHTML = "";
-    questions.forEach((q, i) => {
-        const div = document.createElement("div");
-        div.textContent = `${i + 1}. ${q.question} - Answer: ${q.answer}`;
-        correctAnswersContainer.appendChild(div);
+    // Save the username and score to localStorage
+    const currentUsername = localStorage.getItem("currentUser") || "Anonymous";
+    const finalScore = score; // Assuming `score` is the user's final score
+    localStorage.setItem('quiz_username', currentUsername);
+    localStorage.setItem('quiz_score', finalScore);
+
+    // Redirect to the results page
+    window.location.href = 'result.html';
+}
+
+// Update the leaderboard display
+function updateLeaderboard() {
+    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+    const list = document.getElementById("leaderboard-list");
+    list.innerHTML = "";
+
+    leaderboard.forEach((entry, index) => {
+        const li = document.createElement("li");
+        li.textContent = `${index + 1}. ${entry.username}: ${entry.score}`;
+        list.appendChild(li);
     });
-    updateLeaderboard();
 }
 
 // Restart the quiz
@@ -264,23 +289,6 @@ function startTimer() {
             timerEl.textContent = `Time Left: ${time}s`;
         }
     }, 1000);
-}
-
-// Update the leaderboard
-function updateLeaderboard() {
-    const leaderboard = JSON.parse(localStorage.getItem("leaderboard") || "[]");
-    const user = getCurrentUser() || "Anonymous";
-    leaderboard.push({ user, score });
-    leaderboard.sort((a, b) => b.score - a.score);
-    localStorage.setItem("leaderboard", JSON.stringify(leaderboard.slice(0, 10)));
-
-    const list = document.getElementById("leaderboard-list");
-    list.innerHTML = "";
-    leaderboard.forEach(entry => {
-        const li = document.createElement("li");
-        li.textContent = `${entry.user}: ${entry.score}`;
-        list.appendChild(li);
-    });
 }
 
 // Toggle Dark Mode

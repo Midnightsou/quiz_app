@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Quiz Result</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f4f4f4;
+      text-align: center;
+      padding: 50px;
+    }
+    .result-box {
+      background: white;
+      padding: 30px;
+      border-radius: 15px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+      display: inline-block;
+      max-width: 400px;
+      width: 100%;
+    }
+    h1 {
+      color: #333;
+    }
+    .score {
+      font-size: 24px;
+      margin: 20px 0;
+      color: #4CAF50;
+      font-weight: bold;
+    }
+    button {
+      background: #4CAF50;
+      color: white;
+      padding: 12px 25px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+      margin: 10px;
+      transition: background 0.3s ease, transform 0.2s ease;
+    }
+    button:hover {
+      background: #45a049;
+      transform: translateY(-2px);
+    }
+    button:focus {
+      outline: 2px solid #4CAF50;
+      outline-offset: 2px;
+    }
+  </style>
+</head>
+<body>
+  <div class="result-box">
+    <h1>🎉 Quiz Complete!</h1>
+    <div class="score" id="score">Loading...</div>
+    <button onclick="location.href='leaderboard.html'" aria-label="View Leaderboard">View Leaderboard</button>
+    <button onclick="location.href='index.html'" aria-label="Return to Home">Return to Home</button>
+  </div>
+
+  <script>
+    // Retrieve username and score from localStorage
+    const username = localStorage.getItem('quiz_username') || "Anonymous";
+    const score = parseInt(localStorage.getItem('quiz_score')) || 0;
+
+    // Save to leaderboard
+    function saveToLeaderboard() {
+      try {
+        const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
+        leaderboard.push({ username, score });
+        leaderboard.sort((a, b) => b.score - a.score);
+        leaderboard.splice(10); // Keep top 10
+        localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
+      } catch (error) {
+        console.error("Error saving to leaderboard:", error);
+      }
+    }
+
+    // Display score and save to leaderboard
+    document.getElementById('score').innerText = `${username}, your score is ${score}!`;
+    saveToLeaderboard();
+  </script>
+</body>
+</html>

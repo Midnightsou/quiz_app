@@ -1,23 +1,22 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Islamic Quiz</title>
-  <link rel="stylesheet" href="styles.css" />
-  <body>
-    <div id="theme-toggle">
-        <button onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
-    </div>
-    <!-- Rest of your HTML -->
-</body>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Challenge - Quiz</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
+  <div id="theme-toggle">
+    <button onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
+  </div>
+
   <!-- Welcome Screen -->
   <div id="welcome-screen" class="screen">
     <h1>Welcome ya Mumeen and ya Muminat, <span id="user-name"></span>!</h1>
     <button onclick="showLevelSelection()" aria-label="Start Quiz">Start Quiz</button>
     <button onclick="logout()" aria-label="Logout">Logout</button>
+    <a href="daily_quiz.html" class="primary-btn">Daily Quiz</a>
   </div>
 
   <!-- Level Selection -->
@@ -30,11 +29,12 @@
 
   <!-- Quiz Screen -->
   <div id="quiz-screen" class="screen hidden">
-    <div id="timer" aria-live="polite"></div>
-    <div id="progress-bar"><span id="progress"></span></div>
-    <div id="question-number"></div>
-    <div id="question-text"></div>
-    <div id="options-container"></div>
+    <h1>Daily Challenge</h1>
+    <div id="timer" class="timer">10:00</div> <!-- Timer Display -->
+    <div id="questions-container">
+      <!-- Questions will be dynamically loaded here -->
+    </div>
+    <button onclick="endQuiz()" class="primary-btn">Submit Quiz</button>
   </div>
 
   <!-- Results Screen -->
@@ -62,6 +62,103 @@
     } else {
       // Sanitize and display the username
       document.getElementById("user-name").textContent = currentUser.replace(/</g, "&lt;").replace(/>/g, "&gt;");
+    }
+
+    let timerLimit = 600; // 10 minutes in seconds for Daily Challenge
+    let timerInterval;
+
+    // Start a countdown timer for the challenge
+    function startTimer() {
+      timerInterval = setInterval(() => {
+        if (timerLimit > 0) {
+          timerLimit--;
+          document.getElementById("timer").innerText = formatTime(timerLimit);
+        } else {
+          clearInterval(timerInterval);
+          alert("Time's up! Your quiz has ended.");
+          endQuiz();
+        }
+      }, 1000);
+    }
+
+    // Format time in MM:SS format
+    function formatTime(seconds) {
+      const minutes = Math.floor(seconds / 60);
+      const remainingSeconds = seconds % 60;
+      return `${String(minutes).padStart(2, '0')}:${String(remainingSeconds).padStart(2, '0')}`;
+    }
+
+    // Initialize the quiz when the page loads
+    window.onload = function() {
+      startTimer();  // Start the timer for Daily Challenge
+      loadDailyChallengeQuestions();  // Load the daily challenge questions
+    };
+
+    // Load the daily challenge questions
+    function loadDailyChallengeQuestions() {
+      const questions = getDailyChallengeQuestions();
+      const container = document.getElementById("questions-container");
+      container.innerHTML = "";
+
+      questions.forEach((q, index) => {
+        const questionDiv = document.createElement("div");
+        questionDiv.classList.add("question");
+
+        const questionText = document.createElement("h3");
+        questionText.textContent = `${index + 1}. ${q.question}`;
+        questionDiv.appendChild(questionText);
+
+        q.options.forEach((option) => {
+          const optionButton = document.createElement("button");
+          optionButton.textContent = option;
+          optionButton.classList.add("option-btn");
+          optionButton.onclick = () => selectOption(index, option, q.answer);
+          questionDiv.appendChild(optionButton);
+        });
+
+        container.appendChild(questionDiv);
+      });
+    }
+
+    function getDailyChallengeQuestions() {
+      return [
+        { question: "What is the first Surah of the Quran?", options: ["Al-Fatiha", "Al-Baqarah", "An-Nisa", "Al-Imran"], answer: "Al-Fatiha" },
+        { question: "How many pillars of Islam are there?", options: ["3", "4", "5", "6"], answer: "5" },
+        { question: "Who was the last prophet in Islam?", options: ["Prophet Musa", "Prophet Isa", "Prophet Muhammad", "Prophet Ibrahim"], answer: "Prophet Muhammad" },
+      ];
+    }
+
+    function selectOption(questionIndex, selectedOption, correctAnswer) {
+      const questionDivs = document.querySelectorAll(".question");
+      const questionDiv = questionDivs[questionIndex];
+
+      const buttons = questionDiv.querySelectorAll("button");
+      buttons.forEach((btn) => (btn.disabled = true));
+
+      if (selectedOption === correctAnswer) {
+        event.target.classList.add("correct");
+      } else {
+        event.target.classList.add("incorrect");
+      }
+    }
+
+    function endQuiz() {
+      const questions = getDailyChallengeQuestions();
+      let score = 0;
+
+      const questionDivs = document.querySelectorAll(".question");
+      questionDivs.forEach((div, index) => {
+        const selectedButton = div.querySelector(".correct");
+        if (selectedButton && selectedButton.textContent === questions[index].answer) {
+          score++;
+        }
+      });
+
+      const username = localStorage.getItem("currentUser") || "Anonymous";
+      localStorage.setItem("quiz_username", username);
+      localStorage.setItem("quiz_score", score);
+
+      window.location.href = "result.html";
     }
   </script>
 </body>

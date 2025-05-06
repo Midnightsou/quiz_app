@@ -111,6 +111,13 @@ label {
     margin-bottom: 20px;
 }
 
+.timer {
+  font-size: 24px;
+  font-weight: bold;
+  color: #e74c3c; /* Red for urgency */
+  margin-bottom: 20px;
+}
+
 /* Screen Containers */
 #quiz-screen, #level-screen, #results-screen {
     width: 90%;
@@ -166,6 +173,42 @@ label {
 .incorrect {
     background-color: #e74c3c; /* Red for incorrect answers */
     color: white;
+}
+
+/* Question Container */
+.question {
+  margin-bottom: 20px;
+  padding: 15px;
+  background: #ffffff;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* Option Buttons */
+.option-btn {
+  display: block;
+  width: 100%;
+  padding: 10px;
+  margin: 5px 0;
+  background: #f1f1f1;
+  border: 1px solid #ccc;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background 0.3s ease;
+}
+
+.option-btn:hover {
+  background: #e0e0e0;
+}
+
+.option-btn.correct {
+  background: #4caf50;
+  color: white;
+}
+
+.option-btn.incorrect {
+  background: #e74c3c;
+  color: white;
 }
 
 /* Welcome Screen */

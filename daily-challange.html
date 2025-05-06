@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Daily Quiz Challenge</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: #f9f9f9;
+      padding: 40px;
+      text-align: center;
+    }
+    h1 {
+      margin-bottom: 20px;
+    }
+    .challenge-card {
+      max-width: 600px;
+      margin: 0 auto;
+      background: #fff;
+      border-radius: 12px;
+      padding: 30px;
+      box-shadow: 0 0 15px rgba(0,0,0,0.1);
+    }
+    .challenge-info p {
+      font-size: 18px;
+      margin: 10px 0;
+    }
+    .challenge-btn {
+      margin-top: 20px;
+      background: #4CAF50;
+      color: white;
+      padding: 12px 24px;
+      border: none;
+      border-radius: 8px;
+      font-size: 16px;
+      cursor: pointer;
+    }
+    .challenge-btn:hover {
+      background: #45a049;
+    }
+  </style>
+</head>
+<body>
+  <h1>🌟 Daily Quiz Challenge</h1>
+  <div class="challenge-card">
+    <div class="challenge-info">
+      <p><strong>Today's Challenge:</strong> 20 new questions</p>
+      <p><strong>Time Limit:</strong> 10 minutes</p>
+      <p><strong>Top Score Today:</strong> 180 points</p>
+    </div>
+    <button class="challenge-btn" onclick="startDailyChallenge()">Start Challenge</button>
+  </div>
+
+  <script>
+    // Check if a user has completed the challenge today
+    function checkDailyChallenge() {
+      const lastChallengeDate = localStorage.getItem('lastChallengeDate');
+      const today = new Date().toLocaleDateString();
+
+      if (lastChallengeDate === today) {
+        // User already completed today's challenge
+        alert("You've already completed today's challenge!");
+      } else {
+        // Start the challenge
+        localStorage.setItem('lastChallengeDate', today);
+        window.location.href = 'quiz.html'; // Redirect to the quiz page
+      }
+    }
+
+    function startDailyChallenge() {
+      checkDailyChallenge();
+    }
+  </script>
+</body>
+</html>
