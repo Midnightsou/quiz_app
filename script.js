@@ -1,359 +1,189 @@
-// Utility functions for localStorage management
-const LOCAL_STORAGE_KEY = "quizAppUsers";
-
-// Save user data to localStorage
-function saveUser(username, password) {
-    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
-    if (users[username]) {
-        alert("Username already exists. Please choose a different username.");
-        return false;
-    }
-    users[username] = {
-        password, // In a real app, hash the password before storing it
-        createdAt: new Date().toISOString(),
-    };
-    localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
-    return true;
-}
-
-// Get user data from localStorage
-function getUser(username) {
-    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
-    return users[username] || null;
-}
-
-// Delete user data from localStorage
-function deleteUser(username) {
-    const users = JSON.parse(localStorage.getItem(LOCAL_STORAGE_KEY)) || {};
-    if (users[username]) {
-        delete users[username];
-        localStorage.setItem(LOCAL_STORAGE_KEY, JSON.stringify(users));
-    }
-}
-
-// Authenticate user
-function authenticateUser(username, password) {
-    const user = getUser(username);
-    if (!user) {
-        alert("User not found. Please create an account.");
-        return false;
-    }
-    if (user.password !== password) {
-        alert("Incorrect password. Please try again.");
-        return false;
-    }
-    localStorage.setItem("currentUser", username); // Save the logged-in user
-    return true;
-}
-
-// Logout user
-function logoutUser() {
-    localStorage.removeItem("currentUser");
-    alert("You have been logged out.");
-    window.location.href = "index.html";
-}
-
-// Get the currently logged-in user
-function getCurrentUser() {
-    return localStorage.getItem("currentUser");
-}
-
-// User authentication functions
-function createAccount(event) {
-    event.preventDefault();
-    const username = document.getElementById("create-username").value.trim();
-    const password = document.getElementById("create-password").value.trim();
-
-    if (!username || !password) {
-        alert("All fields are required.");
-        return;
-    }
-
-    const success = saveUser(username, password);
-    if (success) {
-        alert("Account created successfully!");
-        window.location.href = "signin.html";
-    }
-}
-
-function signIn(event) {
-    event.preventDefault();
-    const username = document.getElementById("signin-username").value.trim();
-    const password = document.getElementById("signin-password").value.trim();
-
-    if (!username || !password) {
-        alert("All fields are required.");
-        return;
-    }
-
-    const success = authenticateUser(username, password);
-    if (success) {
-        alert("Sign in successful!");
-        window.location.href = "quiz.html";
-    }
-}
-
-function logout() {
-    logoutUser();
-}
-
-// Questions data
-const questionsData = {
-    easy: [
-        { question: "Who was Prophet Yusuf's father?", options: ["Ibrahim", "Yaqub", "Musa", "Ismail"], answer: "Yaqub" },
-        { question: "Where was Prophet Yusuf thrown into?", options: ["A cave", "A well", "A house", "A pit"], answer: "A well" },
-        { question: "How many brothers did Prophet Yusuf have?", options: ["10", "11", "12", "13"], answer: "11" },
-        { question: "Who tried to seduce Prophet Yusuf?", options: ["The queen", "The king's wife", "The king", "The merchant's wife"], answer: "The king's wife" },
-        { question: "What did Yusuf's brothers do to him?", options: ["Stole his coat", "Told him to leave", "Sold him as a slave", "Threw him in a pit"], answer: "Threw him in a pit" },
-        { question: "Who bought Prophet Yusuf in Egypt?", options: ["The king", "Al-Aziz", "A merchant", "A prince"], answer: "Al-Aziz" },
-        { question: "What was Yusuf known for in Egypt?", options: ["His wisdom", "His strength", "His beauty", "His dream interpretations"], answer: "His dream interpretations" },
-        { question: "Who were the two people Yusuf interpreted dreams for in prison?", options: ["The king and his advisor", "Two prisoners", "The queen and her maid", "His brothers"], answer: "Two prisoners" },
-        { question: "What was the king's dream that Yusuf interpreted?", options: ["Seven cows", "Seven stars", "Seven trees", "Seven years of famine"], answer: "Seven cows" },
-        { question: "What did Prophet Yusuf predict for Egypt?", options: ["Prosperity", "Seven years of famine", "Seven years of peace", "War"], answer: "Seven years of famine" },
-        { question: "What did Yusuf do when he saw his brothers in Egypt?", options: ["He forgave them", "He punished them", "He rejected them", "He ignored them"], answer: "He forgave them" },
-        { question: "Who was the first to recognize Yusuf when he revealed himself?", options: ["His father", "His brothers", "The king", "His uncle"], answer: "His brothers" },
-        { question: "What did Yaqub do when he was told Yusuf was alive?", options: ["Cried and rejoiced", "Refused to believe", "Told them to go back", "Praised Allah"], answer: "Refused to believe" },
-        { question: "What did Yusuf do when he revealed himself to his brothers?", options: ["Punished them", "Forgave them", "Told them to leave", "Cried and left"], answer: "Forgave them" },
-        { question: "What did Yusuf's father Yaqub receive from his sons that proved Yusuf was alive?", options: ["His shirt", "A letter", "His coat", "A ring"], answer: "His shirt" },
-        { question: "How did Prophet Yusuf become powerful in Egypt?", options: ["Through military conquest", "Through his dream interpretations", "By building great structures", "By being loved by the king"], answer: "Through his dream interpretations" },
-        { question: "What did Prophet Yusuf do for his family when they came to Egypt?", options: ["Welcomed them with a feast", "Gave them food", "Sent them to work", "Offered them shelter"], answer: "Gave them food" },
-        { question: "How did Prophet Yusuf treat his brothers when they came to Egypt during the famine?", options: ["He punished them", "He forgave them", "He ignored them", "He sent them away"], answer: "He forgave them" },
-        { question: "What did the king of Egypt do after Yusuf interpreted his dream?", options: ["Fired him", "Made him a governor", "Rewarded him", "Ignored him"], answer: "Made him a governor" },
-        { question: "What did Yusuf do after he was reunited with his family?", options: ["He left Egypt", "He built a palace for them", "He invited them to stay with him", "He made them rich"], answer: "He invited them to stay with him" },
-        { question: "What was the result of Prophet Yusuf's patience and trust in Allah?", options: ["He became king", "He was rewarded with wealth", "He was reunited with his family", "He became a prophet"], answer: "He was reunited with his family" }
-    ],
-    medium: [
-        { question: "What was the name of Prophet Yusuf's father?", options: ["Ibrahim", "Yaqub", "Ismail", "Musa"], answer: "Yaqub" },
-        { question: "Which prophet is Prophet Yusuf's great-grandfather?", options: ["Ishaq", "Ibrahim", "Nuh", "Idris"], answer: "Ibrahim" },
-        { question: "How many brothers did Prophet Yusuf have?", options: ["10", "11", "12", "13"], answer: "11" },
-        { question: "What did Prophet Yusuf see in his dream?", options: ["Fire", "A tree", "11 stars, sun and moon", "A ladder"], answer: "11 stars, sun and moon" },
-        { question: "Why did Yusuf's brothers hate him?", options: ["He was older", "He got more food", "Their father loved him more", "He stole their things"], answer: "Their father loved him more" },
-        { question: "What did the brothers do to Prophet Yusuf?", options: ["Took him to Syria", "Sold him to a traveler", "Threw him in a well", "Hurt him"], answer: "Threw him in a well" },
-        { question: "What did the brothers tell their father about Yusuf?", options: ["He went to town", "He drowned", "A wolf ate him", "He ran away"], answer: "A wolf ate him" },
-        { question: "Who picked up Yusuf from the well?", options: ["A merchant caravan", "His brothers", "A prophet", "An angel"], answer: "A merchant caravan" },
-        { question: "Where was Yusuf sold?", options: ["Jerusalem", "Mecca", "Egypt", "Medina"], answer: "Egypt" },
-        { question: "Who tried to seduce Prophet Yusuf?", options: ["Queen of Egypt", "His master's wife", "His cousin", "His sister"], answer: "His master's wife" },
-        { question: "What was Yusuf known for in prison?", options: ["Carpentry", "Healing", "Dream interpretation", "Leadership"], answer: "Dream interpretation" },
-        { question: "Who had a dream about birds eating from his head?", options: ["The king", "Yusuf", "A prisoner", "A brother"], answer: "A prisoner" },
-        { question: "What was the king's dream that Yusuf interpreted?", options: ["Seven fat cows eaten by seven lean cows", "A wolf", "A boat", "An army"], answer: "Seven fat cows eaten by seven lean cows" },
-        { question: "What position did Yusuf get in Egypt?", options: ["Warrior", "Minister of finance", "Farmer", "Chief judge"], answer: "Minister of finance" },
-        { question: "Why did Yusuf's brothers come to Egypt?", options: ["To conquer", "For trade", "For food during famine", "To search for Yusuf"], answer: "For food during famine" },
-        { question: "Did Yusuf recognize his brothers when they came to Egypt?", options: ["Yes", "No"], answer: "Yes" },
-        { question: "What did Yusuf hide in his brother’s bag?", options: ["Money", "A gem", "The king’s cup", "Bread"], answer: "The king’s cup" },
-        { question: "What did Yusuf do when he finally revealed himself?", options: ["Punished them", "Forgave them", "Told them to leave", "Cried and left"], answer: "Forgave them" },
-        { question: "Who came with Yusuf's brothers to Egypt later?", options: ["Their wives", "Their children", "Their father Yaqub", "Their enemies"], answer: "Their father Yaqub" },
-        { question: "What did Yaqub regain when he saw Yusuf’s shirt?", options: ["Strength", "Wealth", "His sight", "His land"], answer: "His sight" }
-    ],
-    hard: [
-        { question: "What was the reason behind Prophet Yusuf’s brothers’ jealousy?", options: ["His good deeds", "His dream", "His beauty", "His knowledge"], answer: "His dream" },
-        { question: "What did the wife of Al-Aziz try to do to Prophet Yusuf?", options: ["Poison him", "Seduce him", "Imprison him", "Accuse him of theft"], answer: "Seduce him" },
-        { question: "Who was the first to recognize Prophet Yusuf when he revealed himself?", options: ["His father", "His brothers", "The king", "His mother"], answer: "His brothers" },
-        { question: "How did Prophet Yusuf respond to his brothers after revealing himself?", options: ["He punished them", "He forgave them", "He asked for a favor", "He demanded an apology"], answer: "He forgave them" },
-        { question: "What did Yusuf’s father, Yaqub, do when he heard that Yusuf was alive?", options: ["Wept and refused to believe it", "Immediately traveled to Egypt", "Sent gifts to Yusuf", "Gave thanks and praised Allah"], answer: "Wept and refused to believe it" },
-        { question: "Which dream of the king did Yusuf interpret?", options: ["Seven cows", "Seven stars", "Seven cities", "Seven horses"], answer: "Seven cows" },
-        { question: "How many years of famine did Prophet Yusuf predict?", options: ["7", "10", "5", "12"], answer: "7" },
-        { question: "When Yusuf’s brothers arrived in Egypt, what was the first thing he did?", options: ["Tested them by taking one prisoner", "Fed them", "Called for a feast", "Told them about his dream"], answer: "Tested them by taking one prisoner" },
-        { question: "What did Yusuf instruct his servants to do when his brothers left Egypt?", options: ["Return their money secretly", "Give them food and gifts", "Send them away without any food", "Accuse them of theft"], answer: "Return their money secretly" },
-        { question: "What did Yaqub say when he was told that Yusuf was alive?", options: ["Praise be to Allah", "I will not believe it until I see him", "I knew this day would come", "I am happy but sorrowful"], answer: "I will not believe it until I see him" },
-        { question: "What significant event occurred when Prophet Yusuf reunited with his father?", options: ["He became a king", "His sight was restored", "He was crowned", "His dream came true"], answer: "His sight was restored" },
-        { question: "Why did Prophet Yusuf’s brothers fear him when they returned to Egypt?", options: ["Because they thought he would harm them", "Because he was powerful", "Because he recognized them", "Because he had become a king"], answer: "Because they thought he would harm them" },
-        { question: "What did Yusuf do when he was falsely accused?", options: ["He defended himself", "He admitted his crime", "He prayed for patience", "He left the country"], answer: "He prayed for patience" },
-        { question: "What was Prophet Yusuf’s reaction to being falsely accused?", options: ["He defended himself", "He admitted his crime", "He prayed for patience", "He left the country"], answer: "He prayed for patience" },
-        { question: "What did Yusuf do when he reunited with his family?", options: ["He became a king", "He built a palace", "He welcomed them to Egypt", "He made them his ministers"], answer: "He welcomed them to Egypt" },
-        { question: "Did Yusuf recognize his brothers when they came to Egypt?", options: ["Yes", "No"], answer: "Yes" },
-        { question: "What did Yusuf hide in his brother’s bag?", options: ["Money", "A gem", "The king’s cup", "Bread"], answer: "The king’s cup" },
-        { question: "What did Yusuf do when he finally revealed himself?", options: ["He punished them", "He cried and forgave them", "He told them to leave", "He imprisoned them"], answer: "He cried and forgave them" },
-        { question: "Who came with Yusuf's brothers to Egypt later?", options: ["Their wives", "Their children", "Their father Yaqub", "Their enemies"], answer: "Their father Yaqub" },
-        { question: "What did Yaqub regain when he saw Yusuf’s shirt?", options: ["Strength", "Wealth", "His sight", "His land"], answer: "His sight" }
-    ]
-};
-
-// Quiz variables
+// Ensure the user is logged in
+let currentUser = localStorage.getItem("currentUser");
 let questions = [];
-let currentQuestion = 0;
+let currentQuestionIndex = 0;
 let score = 0;
 let timer;
+let timeLeft = 60; // Default time limit
+let quizLevel = "easy"; // Default difficulty level
 
-// Show level selection screen
-function showLevelSelection() {
-    document.getElementById("welcome-screen").classList.add("hidden");
-    document.getElementById("level-screen").classList.remove("hidden");
+// Redirect to sign-in page if the user is not logged in
+if (!currentUser) {
+  window.location.href = "signin.html";
+} else {
+  const userNameElement = document.getElementById("user-name");
+  if (userNameElement) {
+    userNameElement.textContent = currentUser;
+  }
 }
 
-// Start quiz based on selected level
-function startQuiz(level) {
-    questions = [...questionsData[level]];
-    questions = questions.sort(() => Math.random() - 0.5); // Shuffle questions
-    score = 0;
-    currentQuestion = 0;
-    document.getElementById("level-screen").classList.add("hidden");
-    document.getElementById("quiz-screen").classList.remove("hidden");
-    showQuestion();
-    startTimer();
-}
-
-// Display the current question
-function showQuestion() {
-    const q = questions[currentQuestion];
-    document.getElementById("question-number").textContent = `Question ${currentQuestion + 1} of ${questions.length}`;
-    document.getElementById("question-text").textContent = q.question;
-    const optionsContainer = document.getElementById("options-container");
-    optionsContainer.innerHTML = "";
-    q.options.forEach(option => {
-        const btn = document.createElement("button");
-        btn.textContent = option;
-        btn.onclick = () => selectOption(option);
-        optionsContainer.appendChild(btn);
-    });
-    updateProgressBar();
-}
-
-// Handle option selection
-function selectOption(selected) {
-    const correct = questions[currentQuestion].answer;
-    if (selected === correct) score++;
-    currentQuestion++;
-    if (currentQuestion < questions.length) showQuestion();
-    else endQuiz();
-}
-
-// Update the progress bar
-function updateProgressBar() {
-    const progress = ((currentQuestion) / questions.length) * 100;
-    document.getElementById("progress").style.width = `${progress}%`;
-}
-
-// Save score after the quiz ends
-function saveScore(username, score) {
-    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-
-    leaderboard.push({ username, score });
-
-    // Sort by highest score and keep top 10
-    leaderboard.sort((a, b) => b.score - a.score);
-    leaderboard.splice(10);
-
-    localStorage.setItem('leaderboard', JSON.stringify(leaderboard));
-}
-
-// End the quiz and show results
-function endQuiz() {
-    clearInterval(timer); // Stop the timer
-    document.getElementById("quiz-screen").classList.add("hidden");
-    document.getElementById("results-screen").classList.remove("hidden");
-
-    // Save the username and score to localStorage
-    const currentUsername = localStorage.getItem("currentUser") || "Anonymous";
-    const finalScore = score; // Assuming `score` is the user's final score
-    localStorage.setItem('quiz_username', currentUsername);
-    localStorage.setItem('quiz_score', finalScore);
-
-    // Redirect to the results page
-    window.location.href = 'result.html';
-}
-
-// Update the leaderboard display
-function updateLeaderboard() {
-    const leaderboard = JSON.parse(localStorage.getItem('leaderboard')) || [];
-    const list = document.getElementById("leaderboard-list");
-    list.innerHTML = "";
-
-    leaderboard.forEach((entry, index) => {
-        const li = document.createElement("li");
-        li.textContent = `${index + 1}. ${entry.username}: ${entry.score}`;
-        list.appendChild(li);
-    });
-}
-
-// Restart the quiz
-function restartQuiz() {
-    window.location.href = "quiz.html";
-}
-
-// Go back to the main menu
-function goToMainMenu() {
-    window.location.href = "index.html";
-}
-
-// Start the quiz timer
-function startTimer() {
-    let time = 20 * questions.length;
-    const timerEl = document.getElementById("timer");
-    timerEl.textContent = `Time Left: ${time}s`;
-    timer = setInterval(() => {
-        time--;
-        if (time <= 0) {
-            clearInterval(timer);
-            endQuiz();
-        } else {
-            timerEl.textContent = `Time Left: ${time}s`;
-        }
-    }, 1000);
-}
-
-// Toggle Dark Mode
-function toggleDarkMode() {
-    const body = document.body;
-    const themeIcon = document.getElementById("theme-icon");
-
-    // Toggle the dark-mode class
-    body.classList.toggle("dark-mode");
-
-    // Change the icon based on the current mode
-    if (body.classList.contains("dark-mode")) {
-        themeIcon.textContent = "☀️"; // Sun icon for light mode
-    } else {
-        themeIcon.textContent = "🌙"; // Moon icon for dark mode
-    }
-
-    // Save the user's preference in localStorage
-    const isDarkMode = body.classList.contains("dark-mode");
-    localStorage.setItem("darkMode", isDarkMode ? "enabled" : "disabled");
-}
-
-// Apply the saved theme on page load
-window.onload = () => {
-    const savedTheme = localStorage.getItem("darkMode");
-    const themeIcon = document.getElementById("theme-icon");
-
-    if (savedTheme === "enabled") {
-        document.body.classList.add("dark-mode");
-        themeIcon.textContent = "☀️"; // Sun icon for light mode
-    } else {
-        themeIcon.textContent = "🌙"; // Moon icon for dark mode
-    }
+// Sample questions for each level
+const questionData = {
+  easy: [
+    { question: "What is the capital of Saudi Arabia?", options: ["Riyadh", "Makkah", "Medina", "Jeddah"], answer: "Riyadh" },
+    { question: "Who was the first prophet?", options: ["Adam", "Noah", "Moses", "Abraham"], answer: "Adam" },
+  ],
+  medium: [
+    { question: "Which prophet was swallowed by a whale?", options: ["Jonah", "Moses", "Isaiah", "David"], answer: "Jonah" },
+    { question: "Which battle is considered the first battle in Islam?", options: ["Battle of Badr", "Battle of Uhud", "Battle of Khandaq", "Battle of Tabuk"], answer: "Battle of Badr" },
+  ],
+  hard: [
+    { question: "What year did the Battle of Badr occur?", options: ["624 CE", "612 CE", "630 CE", "590 CE"], answer: "624 CE" },
+    { question: "Which Surah was the first to be revealed to Prophet Muhammad?", options: ["Al-Alaq", "Al-Fatiha", "Al-Baqarah", "Al-Ikhlas"], answer: "Al-Alaq" },
+  ],
 };
 
-// Toggle Password Visibility
-function togglePassword(inputId) {
-    const input = document.getElementById(inputId);
-    if (input.type === "password") {
-        input.type = "text";
-    } else {
-        input.type = "password";
-    }
+// Load questions based on the selected level
+function loadQuestions() {
+  questions = questionData[quizLevel];
+  displayQuestion();
 }
 
-// Simple Validation Feedback
-function validateField(inputId, errorId, message) {
-    const input = document.getElementById(inputId);
-    const error = document.getElementById(errorId);
-    if (!input.value.trim()) {
-        error.textContent = message;
-        error.style.display = "block";
-    } else {
-        error.style.display = "none";
-    }
+// Display the current question and options
+function displayQuestion() {
+  if (currentQuestionIndex < questions.length) {
+    const currentQuestion = questions[currentQuestionIndex];
+    document.getElementById("question").textContent = currentQuestion.question;
+    const optionsContainer = document.getElementById("options");
+    optionsContainer.innerHTML = "";
+
+    currentQuestion.options.forEach((option) => {
+      const button = document.createElement("button");
+      button.textContent = option;
+      button.classList.add("option");
+      button.addEventListener("click", () => checkAnswer(option));
+      optionsContainer.appendChild(button);
+    });
+  } else {
+    endQuiz();
+  }
 }
 
-// Example Usage for Validation
-document.getElementById("signin-username").addEventListener("blur", () => {
-    validateField("signin-username", "username-error", "Username is required.");
-});
+// Check the selected answer
+function checkAnswer(selectedOption) {
+  const currentQuestion = questions[currentQuestionIndex];
+  if (selectedOption === currentQuestion.answer) {
+    score++;
+  }
+  currentQuestionIndex++;
+  displayQuestion();
+}
 
-document.getElementById("signin-password").addEventListener("blur", () => {
-    validateField("signin-password", "password-error", "Password is required.");
-});
+// End the quiz and display results
+function endQuiz() {
+  clearInterval(timer);
+  document.getElementById("quiz-container").style.display = "none";
+  document.getElementById("results-container").style.display = "block";
+  document.getElementById("final-score").textContent = `Your score is: ${score} / ${questions.length}`;
+  saveScoreToLeaderboard(currentUser, score);
+}
 
-localStorage.setItem("key", "value");
-const value = localStorage.getItem("key");
+// Start the quiz
+function startQuiz() {
+  currentQuestionIndex = 0;
+  score = 0;
+  timeLeft = 60; // Reset timer
+  loadQuestions();
+  startTimer();
+  document.getElementById("start-quiz-btn").style.display = "none";
+  document.getElementById("quiz-container").style.display = "block";
+}
+
+// Start the timer
+function startTimer() {
+  timer = setInterval(() => {
+    if (timeLeft > 0) {
+      timeLeft--;
+      document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
+    } else {
+      clearInterval(timer);
+      endQuiz();
+    }
+  }, 1000);
+}
+
+// Reset the quiz
+function resetQuiz() {
+  currentQuestionIndex = 0;
+  score = 0;
+  timeLeft = 60;
+  document.getElementById("timer").textContent = `Time left: ${timeLeft}s`;
+  document.getElementById("quiz-container").style.display = "none";
+  document.getElementById("results-container").style.display = "none";
+  document.getElementById("start-quiz-btn").style.display = "inline-block";
+}
+
+// Save score to leaderboard
+function saveScoreToLeaderboard(user, score) {
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  leaderboard.push({ user, score });
+  leaderboard.sort((a, b) => b.score - a.score); // Sort by score descending
+  localStorage.setItem("leaderboard", JSON.stringify(leaderboard));
+}
+
+// Display leaderboard
+function displayLeaderboard() {
+  const leaderboard = JSON.parse(localStorage.getItem("leaderboard")) || [];
+  const leaderboardContainer = document.getElementById("leaderboard");
+  leaderboardContainer.innerHTML = leaderboard
+    .slice(0, 5)
+    .map((entry, index) => `<li>${index + 1}. ${entry.user}: ${entry.score}</li>`)
+    .join("");
+}
+
+// Event listeners for buttons
+document.addEventListener("DOMContentLoaded", () => {
+  // Start quiz button
+  const startQuizButton = document.getElementById("start-quiz-btn");
+  if (startQuizButton) {
+    startQuizButton.addEventListener("click", () => {
+      const selectedLevel = document.querySelector('input[name="difficulty"]:checked');
+      if (selectedLevel) {
+        quizLevel = selectedLevel.value;
+        startQuiz();
+      } else {
+        alert("Please select a difficulty level.");
+      }
+    });
+  }
+
+  // Retry button
+  const retryButton = document.getElementById("retry-btn");
+  if (retryButton) {
+    retryButton.addEventListener("click", resetQuiz);
+  }
+
+  // Quit quiz button
+  const quitQuizButton = document.getElementById("quit-quiz-btn");
+  if (quitQuizButton) {
+    quitQuizButton.addEventListener("click", () => {
+      window.location.href = "index.html";
+    });
+  }
+
+  // Logout button
+  const logoutButton = document.getElementById("logout-btn");
+  if (logoutButton) {
+    logoutButton.addEventListener("click", () => {
+      localStorage.removeItem("currentUser");
+      window.location.href = "signin.html";
+    });
+  }
+
+  // View leaderboard button
+  const viewLeaderboardButton = document.getElementById("view-leaderboard-btn");
+  if (viewLeaderboardButton) {
+    viewLeaderboardButton.addEventListener("click", () => {
+      displayLeaderboard();
+      document.getElementById("leaderboard-container").style.display = "block";
+    });
+  }
+
+  // Close leaderboard button
+  const closeLeaderboardButton = document.getElementById("close-leaderboard-btn");
+  if (closeLeaderboardButton) {
+    closeLeaderboardButton.addEventListener("click", () => {
+      document.getElementById("leaderboard-container").style.display = "none";
+    });
+  }
+});

@@ -1,26 +1,26 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="Test your knowledge and learn more about Islam with the Islamic Quiz App.">
-    <title>Islamic Quiz - Home</title>
-    <body>
-        <div id="theme-toggle">
-            <button onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
-        </div>
-        <!-- Rest of your HTML -->
-    </body>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Islamic Quiz - Home</title>
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <div id="home-screen">
-        <h1>Welcome to the Islamic Quiz App</h1>
-        <p>Test your knowledge and learn more about Islam!</p>
-        <div class="button-container">
-            <button onclick="window.location.href='signin.html'" aria-label="Sign In">Sign In</button>
-            <button onclick="window.location.href='create_account.html'" aria-label="Create Account">Create Account</button>
-        </div>
+  <noscript>
+    <p>Please enable JavaScript to use the Islamic Quiz App.</p>
+  </noscript>
+  <main id="home-screen">
+    <h1 id="welcome-message">Welcome to the Islamic Quiz App!</h1>
+    <div id="auth-buttons">
+      <button id="signin-button" aria-label="Sign In to your account">Sign In</button>
+      <button id="create-account-button" aria-label="Create a new account">Create Account</button>
     </div>
+    <div id="quiz-buttons" style="display: none;">
+      <button id="start-quiz-button" aria-label="Start the quiz">Start Quiz</button>
+      <button id="signout-button" aria-label="Sign out of your account">Sign Out</button>
+    </div>
+  </main>
+  <script src="script.js"></script>
 </body>
 </html>

@@ -1,42 +1,59 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Create Account - Islamic Quiz</title>
-    <link rel="stylesheet" href="styles.css">
-    <script src="script.js" defer></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Create Account</title>
+  <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <div id="theme-toggle">
-        <button onclick="toggleDarkMode()" aria-label="Toggle Dark Mode">🌙 Dark Mode</button>
-    </div>
-    <div id="create-account-screen" class="screen">
-        <div class="form-card">
-            <h2>Create Account</h2>
-            <form onsubmit="createAccount(event)" class="form-container">
-                <div class="input-group">
-                    <label for="create-username">Username</label>
-                    <div class="input-wrapper">
-                        <input type="text" id="create-username" placeholder="Enter your username" aria-label="Username" required>
-                        <span class="icon">👤</span>
-                    </div>
-                    <small class="validation-message" id="username-error"></small>
-                </div>
-                
-                <div class="input-group">
-                    <label for="create-password">Password</label>
-                    <div class="input-wrapper">
-                        <input type="password" id="create-password" placeholder="Enter your password" aria-label="Password" autocomplete="off" required>
-                        <button type="button" class="toggle-password" onclick="togglePassword('create-password')">👁️</button>
-                    </div>
-                    <small class="validation-message" id="password-error"></small>
-                </div>
-                
-                <button type="submit" class="primary-btn">Create Account</button>
-            </form>
-            <p>Already have an account? <a href="signin.html" class="link">Sign In</a></p>
-        </div>
-    </div>
+  <div id="create-account-container">
+    <h2>Create Account</h2>
+    <form id="create-account-form" novalidate>
+      <label for="create-username">Username:</label>
+      <input 
+        type="text" 
+        id="create-username" 
+        name="username" 
+        aria-label="Username" 
+        placeholder="Enter your username" 
+        required 
+        autocomplete="username">
+
+      <label for="create-password">Password:</label>
+      <input 
+        type="password" 
+        id="create-password" 
+        name="password" 
+        aria-label="Password" 
+        placeholder="Enter your password" 
+        required 
+        autocomplete="new-password">
+
+      <label for="confirm-password">Confirm Password:</label>
+      <input 
+        type="password" 
+        id="confirm-password" 
+        name="confirm-password" 
+        aria-label="Confirm Password" 
+        placeholder="Re-enter your password" 
+        required 
+        autocomplete="new-password">
+
+      <small 
+        id="error-message" 
+        class="error-message" 
+        aria-live="polite" 
+        hidden>
+        Passwords do not match!
+      </small>
+
+      <button type="submit" id="create-account-button">Create Account</button>
+    </form>
+    <p>Already have an account? <a href="signin.html">Sign In</a></p>
+  </div>
+
+  <!-- Link to the external JavaScript file -->
+  <script src="create_account.js"></script>
 </body>
 </html>
